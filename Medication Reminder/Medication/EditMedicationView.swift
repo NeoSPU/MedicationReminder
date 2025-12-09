@@ -10,31 +10,11 @@ import SwiftData
 // a view to edit medication
 
 struct EditMedicationView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     
-    enum Mode: Hashable {
-        case add
-        case edit(Medication)
-    }
+    let medication: Medication?
     
-    var mode: Mode
-    
-    init(mode: Mode) {
-        self.mode = mode
-        switch mode {
-        case .add:
-            title = "Add Medication"
-            _name = .init(initialValue: "")
-            _dosage = .init(initialValue: "")
-        case .edit(let medication):
-            title = "Edit \(medication.name)"
-            _name = .init(initialValue: medication.name)
-            _dosage = .init(initialValue: medication.dosage)
-            _time = .init(initialValue: medication.time)
-            _isReminderSet = .init(initialValue: medication.isReminderSet)
-        }
-    }
-    
-    private let title: String
     @State private var name: String = ""
     @State private var dosage: String = ""
     @State private var time: Date = Date()
@@ -43,14 +23,11 @@ struct EditMedicationView: View {
     // For delete confirmation
     @State private var showDeleteConfirm = false
     
-    @State private var error: Error?
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-
-    private var persistenceService: PersistenceService { PersistenceService(modelContext: modelContext) }
+    init(medication: Medication?) {
+        self.medication = medication
+        // state variables will be set in onAppear to keep initializer SwiftUI-friendly
+    }
     
-    // MARK: - Body
-
     var body: some View {
         Form {
             Section(header: Text("Medication Info")) {
@@ -68,27 +45,22 @@ struct EditMedicationView: View {
                     .accessibilityHint("Toggle on to receive reminders")
             }
             
-            if case .edit(let medication) = mode {
-                Button(
-                    role: .destructive,
-                    action: {
-                        delete(name: name)
-                    },
-                    label: {
-                        Text("Delete Category")
-                            .frame(maxWidth: .infinity, alignment: .center)
+            if medication != nil {
+                Section {
+                    Button(role: .destructive) {
+                        showDeleteConfirm = true
+                    } label: {
+                        Label("Delete Medication", systemImage: "trash")
                     }
-                )
+                }
             }
         }
-        .scrollDismissesKeyboard(.interactively)
-        .navigationTitle(title)
+        .navigationTitle(medication == nil ? "Add Medication" : "Edit Medication")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(error: $error)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    save(name: name)
+                    save()
                 }
                 .disabled(!isValid)
             }
@@ -98,12 +70,23 @@ struct EditMedicationView: View {
                 }
             }
         }
+        .onAppear {
+            if let m = medication {
+                name = m.name
+                dosage = m.dosage
+                time = m.time
+                isReminderSet = m.isReminderSet
+            } else {
+                // sensible defaults
+                time = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
+            }
+        }
         .confirmationDialog("Are you sure you want to delete this medication?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
-                   Button("Delete", role: .destructive) {
-                       delete(name: name)
-                   }
-                   Button("Cancel", role: .cancel) {}
-               }
+            Button("Delete", role: .destructive) {
+                deleteAndDismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        }
     }
     
     // MARK: - Helpers
@@ -113,35 +96,26 @@ struct EditMedicationView: View {
         !dosage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    // MARK: - Data
-    
-    private func delete(name: String) {
-        Task {
-            do {
-                try PersistenceService(modelContext: modelContext).deleteMedication(name: name)
-                await MainActor.run { dismiss() }
-            } catch {
-                await MainActor.run { self.error = error }
-            }
+    private func save() {
+        if let existing = medication {
+            existing.name = name
+            existing.dosage = dosage
+            existing.time = time
+            existing.isReminderSet = isReminderSet
+        } else {
+            let newMed = Medication(name: name, dosage: dosage, time: time, isReminderSet: isReminderSet)
+            modelContext.insert(newMed)
         }
+        try? modelContext.save()
+        dismiss()
     }
     
-    private func save(name: String) {
-        Task {
-            do {
-                switch mode {
-                case .add:
-                    try PersistenceService(modelContext: modelContext).addMedication(name: name, dosage: dosage, time: time, isReminderSet: isReminderSet)
-                case .edit(_):
-                    try PersistenceService(modelContext: modelContext).updateMedication(name: name)
-                }
-                await MainActor.run { dismiss() }
-            } catch {
-                print("EditMedicationView save error:", error)
-                await MainActor.run { self.error = error }
-            }
+    private func deleteAndDismiss() {
+        if let m = medication {
+            modelContext.delete(m)
+            try? modelContext.save()
         }
+        dismiss()
     }
-    
 }
 
