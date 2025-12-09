@@ -10,25 +10,44 @@ import SwiftUI
 import SwiftData
 
 struct MedicationRowView: View {
-    let medication: Medication
-        
-        var body: some View {
-            HStack(alignment: .center, spacing: 12) {
+    @Bindable var medication: Medication
+    @Environment(\.modelContext) private var modelContext
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
                 Image(systemName: "pills.fill")
                     .font(.title2)
                     .foregroundStyle(.blue)
+                Text(medication.name)
+                    .font(.headline)
+                    .lineLimit(1)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(medication.name)
-                        .font(.headline)
-                    Text("Dosage: \(medication.dosage)")
+                HStack(spacing: 8) {
+                    Text(medication.dosage)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.secondary)
+                    Text("•")
+                        .foregroundColor(.secondary)
+                    Text(medication.time, style: .time)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
             }
-            .padding(12)
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-            .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+
+            Spacer()
+
+            Toggle(isOn: $medication.isReminderSet) {
+                Text("") // label hidden
+            }
+            .labelsHidden()
+            .onChange(of: medication.isReminderSet) { oldValue, newValue in
+                // Save immediately when user toggles
+                try? modelContext.save()
+            }
+            .accessibilityLabel(medication.isReminderSet ? "Reminder enabled" : "Reminder disabled")
         }
+        .padding(.vertical, 8)
+    }
 }
 

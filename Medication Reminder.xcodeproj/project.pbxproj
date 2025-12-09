@@ -11,6 +11,7 @@
 		1DD5DE672EE774FF009CF221 /* UIApplication+topMostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE662EE774F3009CF221 /* UIApplication+topMostController.swift */; };
 		1DD5DE6E2EE779E1009CF221 /* Utiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE6D2EE779D9009CF221 /* Utiles.swift */; };
 		1DD5DE732EE77B4A009CF221 /* PersistanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE722EE77B37009CF221 /* PersistanceService.swift */; };
+		1DD5DE862EE8A469009CF221 /* AddMedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE852EE8A458009CF221 /* AddMedButton.swift */; };
 		C03A6A612B8E5331008E8380 /* Medication_ReminderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03A6A602B8E5331008E8380 /* Medication_ReminderApp.swift */; };
 		C03A6A672B8E5332008E8380 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C03A6A662B8E5332008E8380 /* Assets.xcassets */; };
 		C03A6A6A2B8E5332008E8380 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C03A6A692B8E5332008E8380 /* Preview Assets.xcassets */; };
@@ -44,6 +45,7 @@
 		1DD5DE662EE774F3009CF221 /* UIApplication+topMostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+topMostController.swift"; sourceTree = "<group>"; };
 		1DD5DE6D2EE779D9009CF221 /* Utiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utiles.swift; sourceTree = "<group>"; };
 		1DD5DE722EE77B37009CF221 /* PersistanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceService.swift; sourceTree = "<group>"; };
+		1DD5DE852EE8A458009CF221 /* AddMedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedButton.swift; sourceTree = "<group>"; };
 		C03A6A5D2B8E5331008E8380 /* Medication Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Medication Reminder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03A6A602B8E5331008E8380 /* Medication_ReminderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medication_ReminderApp.swift; sourceTree = "<group>"; };
 		C03A6A662B8E5332008E8380 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -119,6 +121,14 @@
 			path = Medication;
 			sourceTree = "<group>";
 		};
+		1DD5DE842EE8A44D009CF221 /* Elements */ = {
+			isa = PBXGroup;
+			children = (
+				1DD5DE852EE8A458009CF221 /* AddMedButton.swift */,
+			);
+			path = Elements;
+			sourceTree = "<group>";
+		};
 		C03A6A542B8E5331008E8380 = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +155,7 @@
 				C03A6A602B8E5331008E8380 /* Medication_ReminderApp.swift */,
 				1DD5DE712EE77AC2009CF221 /* Medication */,
 				1DD5DE6F2EE77A4E009CF221 /* Models */,
+				1DD5DE842EE8A44D009CF221 /* Elements */,
 				1DD5DE6C2EE779D0009CF221 /* Services */,
 				1DD5DE702EE77A60009CF221 /* Extensions */,
 				C0D1FDBD2BC8A89600F5E6CE /* Medication-Reminder-Info.plist */,
@@ -312,6 +323,7 @@
 				1DD5DE652EE7745A009CF221 /* MedicationRowView.swift in Sources */,
 				C070F7B12BD1839E00824B8C /* MedicationDashboard.swift in Sources */,
 				C0D1FDC72BC8E27600F5E6CE /* EditMedicationView.swift in Sources */,
+				1DD5DE862EE8A469009CF221 /* AddMedButton.swift in Sources */,
 				1DD5DE672EE774FF009CF221 /* UIApplication+topMostController.swift in Sources */,
 				1DD5DE6E2EE779E1009CF221 /* Utiles.swift in Sources */,
 				1DD5DE732EE77B4A009CF221 /* PersistanceService.swift in Sources */,

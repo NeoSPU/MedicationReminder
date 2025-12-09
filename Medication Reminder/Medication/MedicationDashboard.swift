@@ -16,19 +16,38 @@ struct MedicationDashboard: View {
     @State private var isEditing = false
     @State private var selectedIDs: Set<PersistentIdentifier> = []
     
+    // For delete confirmation
+    @State private var showDeleteConfirm = false
+    @State private var showDeleteSelectedConfirm = false
+    @State private var medicationToDelete: Medication?
+    @State private var error: Error?
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
-                
-                // Apple Health Style Big Header
-                Text("Medications")
-                    .font(.largeTitle.bold())
-                    .padding(.horizontal)
-                
                 if medications.isEmpty {
-                    ContentUnavailableView("No Medications",
-                                           systemImage: "pills",
-                                           description: Text("Add your first medication reminder"))
+                    // Empty state full-screen section
+                    VStack(spacing: 16) {
+                        Image(systemName: "pills.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 88, height: 88)
+                            .foregroundStyle(.tint)
+                        Text("No medication reminders yet")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                        Text("Tap + to add a medication and set reminders. Keeping a regular routine helps maintain medication adherence.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                        NavigationLink(destination: EditMedicationView(medication: nil)) {
+                                       AddMedButton()
+                                   }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 260, alignment: .center)
+                    .listRowBackground(Color.clear)
                 } else {
                     List(selection: $selectedIDs) {
                         ForEach(medications) { medication in
@@ -36,6 +55,39 @@ struct MedicationDashboard: View {
                                 EditMedicationView(medication: medication)
                             } label: {
                                 MedicationRowView(medication: medication)
+                            }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    DispatchQueue.main.async {
+                                        medicationToDelete = medication
+                                        
+                                        showDeleteConfirm = true
+                                    }
+                                    
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    // quick share: plain summary
+                                    share(medication)
+                                } label: {
+                                    Label("Share", systemImage: "square.and.arrow.up")
+                                }
+                                .tint(.green)
+                            }
+                            .contextMenu {
+                                Button("Edit", systemImage: "pencil") { isEditing = true }
+                                Button("Share", systemImage: "square.and.arrow.up") { share(medication) }
+                                Button(role: .destructive) {
+                                    DispatchQueue.main.async {
+                                        medicationToDelete = medication
+                                        showDeleteConfirm = true
+                                    }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
                     }
@@ -54,7 +106,7 @@ struct MedicationDashboard: View {
                 }
                 
                 // Right button
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     if isEditing {
                         Button {
                             shareSelected()
@@ -62,11 +114,18 @@ struct MedicationDashboard: View {
                             Image(systemName: "square.and.arrow.up")
                         }
                         .disabled(selectedIDs.isEmpty)
+                        Button {
+                            showDeleteSelectedConfirm = true
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                        .disabled(selectedIDs.isEmpty)
                         
-                    } else {
+                    } else if !medications.isEmpty {
                         Button("Edit") {
                             withAnimation { isEditing = true }
                         }
+
                     }
                 }
                 
@@ -82,22 +141,58 @@ struct MedicationDashboard: View {
                     }
                 }
             }
+            .confirmationDialog("Are you sure you want to delete selected medications?", isPresented: $showDeleteSelectedConfirm, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) {
+                    deleteSelected()
+                    medicationToDelete = nil
+                    showDeleteConfirm = false
+                }
+                Button("Cancel", role: .cancel) {
+                    medicationToDelete = nil
+                    showDeleteConfirm = false
+                }
+            }
+            .confirmationDialog("Are you sure you want to delete this medication?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) {
+                    delete(medicationToDelete)
+                    medicationToDelete = nil
+                    showDeleteConfirm = false
+                }
+                Button("Cancel", role: .cancel) {
+                    medicationToDelete = nil
+                    showDeleteConfirm = false
+                }
+            }
         }
+        .alert(error: $error)
+        .navigationTitle("Medications")
+        .navigationBarTitleDisplayMode(.large)
     }
     
     // MARK: - Actions
     
-    private func delete(_ med: Medication) {
-        modelContext.delete(med)
-        try? modelContext.save()
+    private func delete(_ med: Medication?) {
+        if let medication = med {
+            modelContext.delete(medication)
+            do {
+                try modelContext.save()
+            } catch {
+                self.error = error
+            }
+        }
     }
     
-    private func deleteIndexSet(_ offsets: IndexSet) {
-        for index in offsets {
-            let med = medications[index]
+    private func deleteSelected() {
+        guard !selectedIDs.isEmpty else { return }
+        // Determine medications matching the selected persistent IDs
+        let medsToDelete = medications.filter { selectedIDs.contains($0.persistentModelID) }
+        for med in medsToDelete {
             modelContext.delete(med)
         }
         try? modelContext.save()
+        // Clear selection and exit edit mode
+        selectedIDs.removeAll()
+        withAnimation { isEditing = false }
     }
     
     private func share(_ med: Medication) {
