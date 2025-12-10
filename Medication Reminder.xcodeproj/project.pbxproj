@@ -12,6 +12,9 @@
 		1DD5DE6E2EE779E1009CF221 /* Utiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE6D2EE779D9009CF221 /* Utiles.swift */; };
 		1DD5DE732EE77B4A009CF221 /* PersistanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE722EE77B37009CF221 /* PersistanceService.swift */; };
 		1DD5DE862EE8A469009CF221 /* AddMedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD5DE852EE8A458009CF221 /* AddMedButton.swift */; };
+		1DD5DE882EE99435009CF221 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1DD5DE872EE99435009CF221 /* Localizable.xcstrings */; };
+		1DD5DE892EE99435009CF221 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1DD5DE872EE99435009CF221 /* Localizable.xcstrings */; };
+		1DD5DE8A2EE99435009CF221 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1DD5DE872EE99435009CF221 /* Localizable.xcstrings */; };
 		C03A6A612B8E5331008E8380 /* Medication_ReminderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03A6A602B8E5331008E8380 /* Medication_ReminderApp.swift */; };
 		C03A6A672B8E5332008E8380 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C03A6A662B8E5332008E8380 /* Assets.xcassets */; };
 		C03A6A6A2B8E5332008E8380 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C03A6A692B8E5332008E8380 /* Preview Assets.xcassets */; };
@@ -46,6 +49,7 @@
 		1DD5DE6D2EE779D9009CF221 /* Utiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utiles.swift; sourceTree = "<group>"; };
 		1DD5DE722EE77B37009CF221 /* PersistanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceService.swift; sourceTree = "<group>"; };
 		1DD5DE852EE8A458009CF221 /* AddMedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedButton.swift; sourceTree = "<group>"; };
+		1DD5DE872EE99435009CF221 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		C03A6A5D2B8E5331008E8380 /* Medication Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Medication Reminder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03A6A602B8E5331008E8380 /* Medication_ReminderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medication_ReminderApp.swift; sourceTree = "<group>"; };
 		C03A6A662B8E5332008E8380 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,6 +133,15 @@
 			path = Elements;
 			sourceTree = "<group>";
 		};
+		1DD5DE8B2EE99533009CF221 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1DD5DE872EE99435009CF221 /* Localizable.xcstrings */,
+				C03A6A662B8E5332008E8380 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		C03A6A542B8E5331008E8380 = {
 			isa = PBXGroup;
 			children = (
@@ -152,15 +165,15 @@
 		C03A6A5F2B8E5331008E8380 /* Medication Reminder */ = {
 			isa = PBXGroup;
 			children = (
+				1DD5DE8B2EE99533009CF221 /* Resources */,
 				C03A6A602B8E5331008E8380 /* Medication_ReminderApp.swift */,
 				1DD5DE712EE77AC2009CF221 /* Medication */,
 				1DD5DE6F2EE77A4E009CF221 /* Models */,
 				1DD5DE842EE8A44D009CF221 /* Elements */,
 				1DD5DE6C2EE779D0009CF221 /* Services */,
 				1DD5DE702EE77A60009CF221 /* Extensions */,
-				C0D1FDBD2BC8A89600F5E6CE /* Medication-Reminder-Info.plist */,
-				C03A6A662B8E5332008E8380 /* Assets.xcassets */,
 				C03A6A682B8E5332008E8380 /* Preview Content */,
+				C0D1FDBD2BC8A89600F5E6CE /* Medication-Reminder-Info.plist */,
 			);
 			path = "Medication Reminder";
 			sourceTree = "<group>";
@@ -276,6 +289,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = C03A6A542B8E5331008E8380;
 			productRefGroup = C03A6A5E2B8E5331008E8380 /* Products */;
@@ -296,6 +310,7 @@
 			files = (
 				C03A6A6A2B8E5332008E8380 /* Preview Assets.xcassets in Resources */,
 				C03A6A672B8E5332008E8380 /* Assets.xcassets in Resources */,
+				1DD5DE882EE99435009CF221 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DD5DE892EE99435009CF221 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +326,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DD5DE8A2EE99435009CF221 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +441,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -480,6 +498,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

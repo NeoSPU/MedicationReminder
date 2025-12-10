@@ -81,7 +81,7 @@ struct EditMedicationView: View {
                 time = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
             }
         }
-        .confirmationDialog("Are you sure you want to delete this medication?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+        .confirmationDialog(NSLocalizedString("delete_one_title", comment: "Delete one title") + "\n" + NSLocalizedString("irreversible", comment: "Irreversible warning"), isPresented: $showDeleteConfirm, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 deleteAndDismiss()
             }
