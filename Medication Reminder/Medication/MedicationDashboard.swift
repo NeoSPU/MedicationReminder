@@ -36,7 +36,7 @@ struct MedicationDashboard: View {
                         Text("No medication reminders yet")
                             .font(.title3)
                             .fontWeight(.semibold)
-                        Text("Tap + to add a medication and set reminders. Keeping a regular routine helps maintain medication adherence.")
+                        Text("Add a medication to get timely reminders and stay on track.")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -58,12 +58,8 @@ struct MedicationDashboard: View {
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
-                                    DispatchQueue.main.async {
-                                        medicationToDelete = medication
-                                        
-                                        showDeleteConfirm = true
-                                    }
-                                    
+                                    medicationToDelete = medication
+                                    showDeleteConfirm = true
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -81,10 +77,8 @@ struct MedicationDashboard: View {
                                 Button("Edit", systemImage: "pencil") { isEditing = true }
                                 Button("Share", systemImage: "square.and.arrow.up") { share(medication) }
                                 Button(role: .destructive) {
-                                    DispatchQueue.main.async {
-                                        medicationToDelete = medication
-                                        showDeleteConfirm = true
-                                    }
+                                    medicationToDelete = medication
+                                    showDeleteConfirm = true
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -131,7 +125,7 @@ struct MedicationDashboard: View {
                 
                 // Add button (only outside editing)
                 ToolbarItem(placement: .bottomBar) {
-                    if !isEditing {
+                    if !isEditing && !medications.isEmpty {
                         NavigationLink {
                             EditMedicationView(medication: nil)
                         } label: {
@@ -141,7 +135,7 @@ struct MedicationDashboard: View {
                     }
                 }
             }
-            .confirmationDialog("Are you sure you want to delete selected medications?", isPresented: $showDeleteSelectedConfirm, titleVisibility: .visible) {
+            .confirmationDialog("Delete \(selectedIDs.count) Medication?", isPresented: $showDeleteSelectedConfirm, titleVisibility: .visible) {
                 Button("Delete", role: .destructive) {
                     deleteSelected()
                     medicationToDelete = nil
@@ -152,7 +146,7 @@ struct MedicationDashboard: View {
                     showDeleteConfirm = false
                 }
             }
-            .confirmationDialog("Are you sure you want to delete this medication?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+            .confirmationDialog("Delete Medication?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
                 Button("Delete", role: .destructive) {
                     delete(medicationToDelete)
                     medicationToDelete = nil
