@@ -30,18 +30,18 @@ struct EditMedicationView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Medication Info")) {
-                TextField("Name (e.g. Vitamin D)", text: $name)
+            Section(header: Text(NSLocalizedString("medication_info_section", comment: "Medication Info"))) {
+                TextField(NSLocalizedString("med_name_hint", comment: "placeholder for medication name"), text: $name)
                     .accessibilityHint("Enter medication name")
-                TextField("Dosage (e.g. 1000 IU / 100 mg)", text: $dosage)
+                TextField(NSLocalizedString("dosage_hint", comment: "placeholder for medication dosage"), text: $dosage)
                     .keyboardType(.default)
                     .accessibilityHint("Enter dosage and units")
             }
             
-            Section(header: Text("Reminder")) {
-                DatePicker("Reminder time", selection: $time, displayedComponents: .hourAndMinute)
+            Section(header: Text(NSLocalizedString("data_picker_title", comment: "Reminder"))) {
+                DatePicker(NSLocalizedString("data_picker_header", comment: "Reminder time"), selection: $time, displayedComponents: .hourAndMinute)
                     .accessibilityLabel("Reminder time")
-                Toggle("Enable reminder", isOn: $isReminderSet)
+                Toggle(NSLocalizedString("toggle_header", comment: "Enable reminder"), isOn: $isReminderSet)
                     .accessibilityHint("Toggle on to receive reminders")
             }
             
@@ -50,22 +50,22 @@ struct EditMedicationView: View {
                     Button(role: .destructive) {
                         showDeleteConfirm = true
                     } label: {
-                        Label("Delete Medication", systemImage: "trash")
+                        Label(NSLocalizedString("delete_button_label_long", comment: "Delete Medication"), systemImage: "trash")
                     }
                 }
             }
         }
-        .navigationTitle(medication == nil ? "Add Medication" : "Edit Medication")
+        .navigationTitle(medication == nil ? NSLocalizedString("nav_title_add", comment:"Add Medication") : NSLocalizedString("nav_title_edit", comment: "Edit Medication"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
+                Button(NSLocalizedString("btn_lbl_save", comment: "Save")) {
                     save()
                 }
                 .disabled(!isValid)
             }
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel", role: .cancel) {
+                Button(NSLocalizedString("btn_lbl_cancel", comment: "Cancel"), role: .cancel) {
                     dismiss()
                 }
             }
