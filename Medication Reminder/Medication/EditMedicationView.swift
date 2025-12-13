@@ -64,11 +64,6 @@ struct EditMedicationView: View {
                 }
                 .disabled(!isValid)
             }
-            ToolbarItem(placement: .cancellationAction) {
-                Button(NSLocalizedString("btn_lbl_cancel", comment: "Cancel"), role: .cancel) {
-                    dismiss()
-                }
-            }
         }
         .onAppear {
             if let m = medication {

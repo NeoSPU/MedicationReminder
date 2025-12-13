@@ -52,42 +52,7 @@ final class PersistenceService {
             print("ModelContext save error:", error)
             throw error
         }
-
-        // Пост-проверка: полезно для отладки, но не должна маскировать успешное сохранение
-        do {
-            let fetched = try fetchnewMedication(named: normalized)
-            print("Fetched medication name after save:", fetched.name)
-        } catch {
-            print("Post-save fetch did not find medication with name:", normalized, "error:", error)
-            // Не пробрасываем здесь — сохранение уже прошло
-        }
-
         return newMedication
-//        let descriptor = FetchDescriptor<Medication>(
-//            predicate: #Predicate { $0.name == name }
-//        )
-//        let existing = try modelContext.fetch(descriptor)
-//        if existing.first != nil {
-//            throw PersistenceError.medicineAlreadyExists(name: name)
-//        }
-//        let newMedication = Medication(name: name, dosage: dosage, time: time, isReminderSet: isReminderSet)
-//        modelContext.insert(newMedication)
-//        do {
-//            try modelContext.save()
-//        } catch {
-//            print("ModelContext save error:", error)
-//            throw error
-//        }
-//        
-//        do {
-//            let fetched = try fetchnewMedication(named: name)
-//            print("Fetched medication name:", fetched.name)
-//        } catch {
-//            print("ModelContext feych error:", error)
-//            throw error
-//        }
-//        
-//        return newMedication
     }
     
     /// Read method for Medication
@@ -103,16 +68,6 @@ final class PersistenceService {
         } else {
             throw PersistenceError.medicineNotFound(name: normalized)
         }
-//
-//        let descriptor = FetchDescriptor<Medication>(
-//            predicate: #Predicate { $0.name == name }
-//        )
-//        let results = try modelContext.fetch(descriptor)
-//        if let medication = results.first {
-//            return medication
-//        } else {
-//            throw PersistenceError.medicineNotFound(name: name)
-//        }
     }
     
     /// Update method for Medication
